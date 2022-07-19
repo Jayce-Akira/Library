@@ -15,7 +15,6 @@ Vous pouvez vérifier les pré-requis avec la commande suivante (de la CLI Symfo
 ```bash
 symfony check:requirement
 ```
-
 ### Lancer l'environnement de développement
 
 bien vérifier si le fichier .env est bien dans votre environnement

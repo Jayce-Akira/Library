@@ -9,20 +9,26 @@ La Réserve de la Chapelle (la médiathèque de La Chapelle-Curreaux) est un sit
 * PHP 8.1
 * Composer
 * Symfony CLI
+* nodejs et npm
 
 Vous pouvez vérifier les pré-requis avec la commande suivante (de la CLI Symfony) :
 
 ```bash
 symfony check:requirement
 ```
-
 ### Lancer l'environnement de développement
 
 bien vérifier si le fichier .env est bien dans votre environnement
 Ne pas hésiter à la modifier
 
 ```bash
+composer install
+npm install
+npm run build
 symfony console doctrine:database:create
 symfony console doctrine:migrate:migration
 symfony server:start -d
 ```
+
+Mise en place des couleurs du théme
+library\node_modules\bootstrap\scss\_variables.scss

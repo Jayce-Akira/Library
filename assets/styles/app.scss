@@ -1,0 +1,14 @@
+@import "~bootstrap/scss/bootstrap";
+
+//Je mets en place le font-family dans le body de bootstrap
+@font-face {
+    font-family: "regular" ;
+    src: url("montserrat/Montserrat-Regular.ttf") format("truetype");
+}
+
+:root {
+    --bs-body-font-family: 'regular',  sans-serif;
+}
+
+
+

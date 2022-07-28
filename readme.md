@@ -32,3 +32,5 @@ symfony server:start -d
 
 Mise en place des couleurs du théme
 library\node_modules\bootstrap\scss\_variables.scss
+On le pousse dans le :
+library\assets\styles\custom.scss

@@ -1,0 +1,16 @@
+@import "custom";
+@import "~bootstrap/scss/bootstrap";
+
+// Je mets en place le font-family dans le body de bootstrap
+@font-face {
+    font-family: "regular" ;
+    src: url("montserrat/Montserrat-Regular.ttf") format("truetype");
+}
+
+$font-family-base: 'regular',  sans-serif;
+
+// Je change la couleur des inputs form control
+.form-control:focus {
+    border-color: #562507ff !important;
+    box-shadow: 0px 0px 20px rgba(86, 37, 7, 1) !important;
+  }

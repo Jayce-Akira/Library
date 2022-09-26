@@ -1,3 +1,4 @@
+<section>
 <div class="px-4 py-5 my-5 text-center border-bottom">
     <a href="/">
     <img class"text-blancCasse" width" 150px"; height="200px"; src="{{asset('images/logo-white.png')}}" alt="logo
@@ -7,8 +8,14 @@
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4 text-marronClaire">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo </p>
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <button  class="btn btn-sable me-2 " type="submit"><a class="nav-link text-marronFonce fw-normal" href="#">Connexion</a></button>
-        <button  class="btn btn-marronClaire" type="submit"><a class="nav-link text-sable fw-normal" href="#">S'enregistrer</a></button>
+        {% if app.user %}
+            <button  class="btn btn-sable" type="submit"><a class="nav-link text-marronFonce fw-normal" href="{{path('user', {id: app.user.id}) }}">Mon compte</a></button>
+            <button  class="btn btn-marronClaire" type="submit"><a class="nav-link text-sable fw-normal" href="{{ path('app_logout') }}">Déconexion</a></button>
+        {% else %}
+            <button  class="btn btn-sable" type="submit"><a class="nav-link text-marronFonce fw-normal" href="{{ path('app_login') }}">Connexion</a></button>
+            <button  class="btn btn-marronClaire" type="submit"><a class="nav-link text-sable fw-normal" href="{{ path('app_register') }}">S'enregistrer</a></button>
+        {% endif %}
       </div>
     </div>
   </div>
+</section>

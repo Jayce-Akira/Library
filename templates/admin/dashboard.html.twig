@@ -1,0 +1,28 @@
+{% extends "@EasyAdmin/page/content.html.twig" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="justify-content-center">Bienvenue au sein de votre Administration Chapelle-Curreaux</h1>
+   <nav class="navbar navbar-expand-lg align-items-center py-3">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between text-center" id="navbarSupportedContent">
+        <div>
+        {# balise vide #}
+        </div>
+            <ul class="navbar-nav text-marronClaire fw-bolder">
+                <li class="nav-item"><a href="/" class="nav-link text-marronClaire">Accueil</a></li>
+                <li class="nav-item"><a href="{{ path('app_search') }}" class="nav-link text-marronClaire">Recherche</a></li>
+                <li class="nav-item"><a href="{{path('user', {id: app.user.id}) }}" class="nav-link text-marronClaire">Mon compte</a></li>
+                <li class="nav-item"><a href="{{path('admin') }}" class="nav-link text-marronClaire">Administration</a></li>
+                <li class="nav-item"><a href="{{ path('app_loan') }}" class="nav-link text-marronClaire">Réservation</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-marronClaire">Aide</a></li>
+            </ul>
+          <div class="navbar-nav">
+          </div>
+        </div>
+      </nav>
+</div>
+{% endblock %}

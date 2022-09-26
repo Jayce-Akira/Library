@@ -1,0 +1,5 @@
+{% if app.user %}
+  {% include 'user/footer.html.twig' %}
+{% else %}
+  {% include 'home/footer.html.twig' %}
+{% endif %}

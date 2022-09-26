@@ -1,0 +1,77 @@
+<section class="container mt-5">
+{% for message in app.flashes('success') %}
+<div class="alert alert-success mt-4">
+ {{ message }}
+</div>
+{% endfor %}
+{% for message in app.flashes('danger') %}
+<div class="alert alert-danger mt-4">
+ {{ message }}
+</div>
+{% endfor %}
+{% for message in app.flashes('warning') %}
+<div class="alert alert-warning mt-4">
+ {{ message }}
+</div>
+{% endfor %}
+<ul class="nav nav-tabs d-flex justify-content-center text-marronClaire fw-bold" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active text-marronClaire fw-bold" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Réservation en cours</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link text-marronClaire fw-bold" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Prêt en cours</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active text-center" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+  <table class="table">
+  <thead>
+    <tr class="text-marronFonce">
+      <th scope="col">Numéro de Prêt</th>
+      <th scope="col">Titre</th>
+      <th scope="col">date</th>
+      <th scope="col">Supprimer</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for loansUser in loanUser %}
+    <tr class="text-marronClaire">
+      <th scope="row">{{ loansUser.id }}</th>
+      <td>{{ loansUser.book.title }}</td>
+      <td>{{ loansUser.date_reserved|date('d/m/Y') }}</td>
+      <td><button  class="btn btn-danger" type="submit"><a class="nav-link fw-normal" href="{{ path('delete_loan', {id: loansUser.id}) }}">Supprimer</a></button></td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+</div>
+  <div class="tab-pane fade text-center" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    <table class="table">
+  <thead>
+    <tr class="text-marronFonce">
+      <th scope="col">Numéro de Prêt</th>
+      <th scope="col">Titre</th>
+      <th scope="col">date de prêt</th>
+      <th scope="col">date retour du prêt</th>
+      <th scope="col">Emprunt en Retard</th>
+    </tr>
+  </thead>
+  <tbody class="align-items-center">
+    {% for loansUserConfirmed in loanUserConfirmed %}
+    <tr class="text-marronClaire">
+      <th class="align-middle" scope="row">{{ loansUserConfirmed.id }}</th>
+      <td class="align-middle">{{ loansUserConfirmed.book.title }}</td>
+      <td class="align-middle">{{ loansUserConfirmed.date_loan|date('d/m/Y') }}</td>
+      <td class="align-middle">{{ loansUserConfirmed.date_return|date('d/m/Y') }}</td>
+      <td>
+      {% if loansUserConfirmed.is_late %}
+      <div class="alert alert-danger" role="alert">Veuillez retouner ce livre, Merci</div>
+      {% endif %}
+      </td>
+    </tr>
+      {% endfor %}
+  </tbody>
+</table>
+  </div>
+</div>
+</section>

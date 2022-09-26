@@ -89,9 +89,3 @@ $theme-colors: (
 
 // Je change la variable du body-bg pour qu'elle soit à la couleur
 $body-bg: $alabaster;
-
-// Je change la couleur des inputs form control
-.form-control:focus {
-  border-color: #562507ff !important;
-  box-shadow: 0px 0px 20px rgba(86, 37, 7, 1) !important;
-}

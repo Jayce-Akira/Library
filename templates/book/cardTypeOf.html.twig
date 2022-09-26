@@ -1,0 +1,52 @@
+<section>
+{% if app.user %}
+<div class="container px-4 py-5" style="margin-top: 50px;" id="custom-cards">
+  <h2 class=" d-flex justify-content-center text-marronClaire">
+   Dans le même genre...
+  </h2>
+<div class= "row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+ {% for book in books %}
+    <a class="col" href="{{path('book', {id: book.id}) }}" style="text-decoration: none;">
+      <div class="card card-cover h-100 overflow-hidden rounded-4 shadow-lg"
+        style="background-image: url('{{asset('images/' ~ book.img_cover)}}'); background-position: center; background-repeat: no-repeat; background-size: cover;">
+        <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+          <h2 class="mb-4 display-6 lh-1 fw-bold text-marronFonce d-flex justify-content-center">
+           {{ book.title }}
+          </h2>
+          <p class="mb-0 text-marronFonce d-flex justify-content-center" style="margin-top: 50px;"> {{ book.description|u.truncate(150, '...', false) }}</p>
+          <p class="h6 text-uppercase mb-0 ms-auto text-marronFonce" style="margin-top: 50px;">
+              <time datetime="2019-05-02">Publiée le {{book.date_published|date('d/m/Y')}}</time>
+            </p>
+        </div>
+      </div>
+    </a>
+ {% endfor %}
+</div>
+</div>
+{% else %}
+<div class="container px-4 py-5" style="margin-top: 50px;" id="custom-cards">
+  <h2 class=" d-flex justify-content-center text-marronClaire">
+   Dans le même genre...
+  </h2>
+<div class= "row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+ {% for book in books %}
+    <a class="col" href="{{path('no_book', {id: book.id}) }}" style="text-decoration: none;">
+      <div class="card card-cover h-100 overflow-hidden rounded-4 shadow-lg"
+        style="background-image: url('{{asset('images/' ~ book.img_cover)}}'); background-position: center; background-repeat: no-repeat; background-size: cover;">
+        <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+          <h2 class="mb-4 display-6 lh-1 fw-bold text-marronFonce d-flex justify-content-center">
+           {{ book.title }}
+          </h2>
+          <p class="mb-0 text-marronFonce d-flex justify-content-center" style="margin-top: 50px;"> {{ book.description|u.truncate(150, '...', false) }}</p>
+          <p class="h6 text-uppercase mb-0 ms-auto text-marronFonce" style="margin-top: 50px;">
+              <time datetime="2019-05-02">Publiée le {{book.date_published|date('d/m/Y')}}</time>
+            </p>
+        </div>
+      </div>
+    </a>
+ {% endfor %}
+</div>
+</div>
+{% endif %}
+
+</section>

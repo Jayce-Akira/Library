@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block body %}
+{% include "user/nav.html.twig" %}
+<section class="container text-center text-marronClaire w-50">
+      <h1 class="fw-bolder mt-5">
+        Modification
+      </h1>
+      {% for message in app.flashes('success') %}
+      <div class="alert alert-success mt-5" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+      {% for message in app.flashes('warning') %}
+      <div class="alert alert-warning mt-5" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+      {{ form_start(userForm) }}
+        <div class="row mt-5">
+            <div class="col">
+                {{ form_row(userForm.firstname) }}
+            </div>
+            <div class="col">
+            {{ form_row(userForm.lastname) }}
+            </div>
+        </div>
+        {{ form_row(userForm.email) }}
+        {{  form_row(userForm.date_of_birth) }}
+        {{ form_row(userForm.address) }}
+        <div class="row">
+            <div class="col">
+                {{ form_row(userForm.zipcode) }}
+                {{ form_row(userForm.phone) }}
+            </div>
+            <div class="col">
+                {{ form_row(userForm.city) }}
+                {{ form_row(userForm.mobile_phone) }}
+            </div>
+      </div>
+        {{ form_row(userForm.password) }}
+      <button type="submit" class="btn btn-marronClaire text-sable btn-lg mt-5">
+        Modifier
+      </button>
+      {{ form_end(userForm) }}
+      <button  class="btn btn-sable mt-5" type="submit"><a class="nav-link text-marronFonce fw-normal" href="{{path('user_mdp', {id: app.user.id}) }}">Modifier Mot de Passe</a></button>
+  </section>
+  {% include "user/footer.html.twig" %}
+{% endblock %}

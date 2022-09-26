@@ -6,6 +6,7 @@ La Réserve de la Chapelle (la médiathèque de La Chapelle-Curreaux) est un sit
 
 ### Pré-requis
 
+* Symfony 6.0
 * PHP 8.1
 * Composer
 * Symfony CLI
@@ -25,8 +26,8 @@ Ne pas hésiter à la modifier
 composer install
 npm install
 npm run build
-symfony console doctrine:database:create
-symfony console doctrine:migrate:migration
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
 symfony server:start -d
 ```
 

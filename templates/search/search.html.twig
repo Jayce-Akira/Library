@@ -1,0 +1,83 @@
+<section class="container text-center text-marronClaire w-50">
+  <h1 class="fw-bolder mt-5">
+    Pour rechercher un genre de livre
+  </h1>
+  <div style="margin-top: 100px;">
+
+     {{ form(searchForm) }}
+
+  </div>
+{% if app.user %}
+    {% if categories.name != null %}
+    <div class="container px-4 py-5" style="margin-top: 50px;" id="custom-cards">
+      <h2 class=" d-flex justify-content-center text-marronClaire">
+        Votre Catégories de recherche est : {{ categories.name }}
+      </h2>
+    {% else %}
+    <div class="container px-4 py-5" style="margin-top: 50px;" id="custom-cards">
+      <h2 class=" d-flex justify-content-center text-marronClaire">
+        L'ensemble de nos livres.
+      </h2>
+    {% endif %}
+
+    <div class= "row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5" style="margin-top: 50px;">
+    {% for book in searchResult %}
+        <a class="col" href="{{path('book', {id: book.id}) }}" style="text-decoration: none;" data-toggle="popover">
+          <div class="card card-cover h-100 overflow-hidden rounded-4 shadow-lg"
+            style="background-image: url('{{asset('images/' ~ book.img_cover)}}'); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+              <h2 class="mb-4 display-6 lh-1 fw-bold text-marronFonce d-flex justify-content-center">
+              {{ book.title }}
+              </h2>
+              <p class="mb-0 text-marronFonce d-flex justify-content-center" style="margin-top: 50px;"> {{ book.description|u.truncate(150, '...', false) }}</p>
+              <p class="h6 text-uppercase mb-0 ms-auto text-marronFonce" style="margin-top: 50px;">
+                  <time datetime="2019-05-02">Publiée le {{book.date_published|date('d/m/Y')}}</time>
+                </p>
+            </div>
+          </div>
+        </a>
+    {% endfor %}
+    </div>
+    </div>
+    <div class="d-flex justify-content-center mt-6">
+    {% do searchResult.setPageRange(2) %}
+    {{ knp_pagination_render(searchResult, 'search/pagination.html.twig') }}
+    </div>
+ {% else %}
+    {% if categories.name != null %}
+    <div class="container px-4 py-5" style="margin-top: 50px;" id="custom-cards">
+      <h2 class=" d-flex justify-content-center text-marronClaire">
+        Votre Catégories de recherche est : {{ categories.name }}
+      </h2>
+    {% else %}
+    <div class="container px-4 py-5" style="margin-top: 50px;" id="custom-cards">
+      <h2 class=" d-flex justify-content-center text-marronClaire">
+        L'ensemble de nos livres.
+      </h2>
+    {% endif %}
+
+    <div class= "row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5" style="margin-top: 50px;">
+    {% for book in searchResult %}
+        <a class="col" href="{{path('no_book', {id: book.id}) }}" style="text-decoration: none;" data-toggle="popover">
+          <div class="card card-cover h-100 overflow-hidden rounded-4 shadow-lg"
+            style="background-image: url('{{asset('images/' ~ book.img_cover)}}'); background-position: center; background-repeat: no-repeat; background-size: cover;">
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+              <h2 class="mb-4 display-6 lh-1 fw-bold text-marronFonce d-flex justify-content-center">
+              {{ book.title }}
+              </h2>
+              <p class="mb-0 text-marronFonce d-flex justify-content-center" style="margin-top: 50px;"> {{ book.description|u.truncate(150, '...', false) }}</p>
+              <p class="h6 text-uppercase mb-0 ms-auto text-marronFonce" style="margin-top: 50px;">
+                  <time datetime="2019-05-02">Publiée le {{book.date_published|date('d/m/Y')}}</time>
+                </p>
+            </div>
+          </div>
+        </a>
+    {% endfor %}
+    </div>
+    </div>
+    <div class="d-flex justify-content-center mt-6">
+    {% do searchResult.setPageRange(2) %}
+    {{ knp_pagination_render(searchResult, 'search/pagination.html.twig') }}
+    </div>
+ {% endif %}
+</section>

@@ -12,13 +12,13 @@ class Type
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column()]
+    #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Book::class, mappedBy: 'type')]
+    #[ORM\OneToMany(mappedBy: 'type', targetEntity: Book::class, orphanRemoval: true)]
     private Collection $books;
 
     public function __construct()
@@ -54,8 +54,8 @@ class Type
     public function addBook(Book $book): self
     {
         if (!$this->books->contains($book)) {
-            $this->books[] = $book;
-            $book->addType($this);
+            $this->books->add($book);
+            $book->setType($this);
         }
 
         return $this;
@@ -64,9 +64,18 @@ class Type
     public function removeBook(Book $book): self
     {
         if ($this->books->removeElement($book)) {
-            $book->removeType($this);
+            // set the owning side to null (unless already changed)
+            if ($book->getType() === $this) {
+                $book->setType(null);
+            }
         }
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+    
 }

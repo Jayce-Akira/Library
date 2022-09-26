@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -13,40 +14,40 @@ class Book
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column()]
+    #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imgCover = null;
+    #[ORM\Column(length: 255)]
+    private ?string $img_cover = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $author = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $datePublished = null;
+    private ?\DateTimeInterface $date_published = null;
 
     #[ORM\Column(length: 255)]
     private ?string $editor = null;
 
     #[ORM\Column]
-    private ?int $nbOfBooks = null;
+    private ?int $nb_of_book = null;
 
-    #[ORM\ManyToMany(targetEntity: BookLoan::class, mappedBy: 'book')]
-    private Collection $bookLoans;
+    #[ORM\ManyToOne(inversedBy: 'books')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Type $type = null;
 
-    #[ORM\ManyToMany(targetEntity: type::class, inversedBy: 'books')]
-    private Collection $type;
+    #[ORM\OneToMany(mappedBy: 'book', targetEntity: Loan::class, orphanRemoval: true)]
+    private Collection $loans;
 
     public function __construct()
     {
-        $this->bookLoans = new ArrayCollection();
-        $this->type = new ArrayCollection();
+        $this->loans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,12 +69,12 @@ class Book
 
     public function getImgCover(): ?string
     {
-        return $this->imgCover;
+        return $this->img_cover;
     }
 
-    public function setImgCover(?string $imgCover): self
+    public function setImgCover(string $img_cover): self
     {
-        $this->imgCover = $imgCover;
+        $this->img_cover = $img_cover;
 
         return $this;
     }
@@ -83,7 +84,7 @@ class Book
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -104,12 +105,12 @@ class Book
 
     public function getDatePublished(): ?\DateTimeInterface
     {
-        return $this->datePublished;
+        return $this->date_published;
     }
 
-    public function setDatePublished(\DateTimeInterface $datePublished): self
+    public function setDatePublished(\DateTimeInterface $date_published): self
     {
-        $this->datePublished = $datePublished;
+        $this->date_published = $date_published;
 
         return $this;
     }
@@ -126,66 +127,74 @@ class Book
         return $this;
     }
 
-    public function getNbOfBooks(): ?int
+    public function getNbOfBook(): ?int
     {
-        return $this->nbOfBooks;
+        return $this->nb_of_book;
     }
 
-    public function setNbOfBooks(int $nbOfBooks): self
+    public function setNbOfBook(int $nb_of_book): self
     {
-        $this->nbOfBooks = $nbOfBooks;
+        $this->nb_of_book = $nb_of_book;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, BookLoan>
-     */
-    public function getBookLoans(): Collection
-    {
-        return $this->bookLoans;
-    }
-
-    public function addBookLoan(BookLoan $bookLoan): self
-    {
-        if (!$this->bookLoans->contains($bookLoan)) {
-            $this->bookLoans[] = $bookLoan;
-            $bookLoan->addBook($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBookLoan(BookLoan $bookLoan): self
-    {
-        if ($this->bookLoans->removeElement($bookLoan)) {
-            $bookLoan->removeBook($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, type>
-     */
-    public function getType(): Collection
+    public function getType(): ?Type
     {
         return $this->type;
     }
 
-    public function addType(type $type): self
+    public function setType(?Type $type): self
     {
-        if (!$this->type->contains($type)) {
-            $this->type[] = $type;
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Loan>
+     */
+    public function getLoans(): Collection
+    {
+        return $this->loans;
+    }
+
+    public function addLoan(Loan $loan): self
+    {
+        if (!$this->loans->contains($loan)) {
+            $this->loans->add($loan);
+            $loan->setBook($this);
         }
 
         return $this;
     }
 
-    public function removeType(type $type): self
+    public function removeLoan(Loan $loan): self
     {
-        $this->type->removeElement($type);
+        if ($this->loans->removeElement($loan)) {
+            // set the owning side to null (unless already changed)
+            if ($loan->getBook() === $this) {
+                $loan->setBook(null);
+            }
+        }
 
         return $this;
+    }
+    public function __toString(){
+        return $this->title; // Remplacer champ par une propriété "string" de l'entité
+    }
+
+    public function date_published()
+    {
+        return $this->date_published;
+    }
+
+    public function img_cover()
+    {
+        return $this->img_cover;
+    }
+
+    public function nb_of_book(){
+        return $this->nb_of_book;
     }
 }

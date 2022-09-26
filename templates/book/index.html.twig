@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livre{% endblock %}
+
+{% block body %}
+{% include 'search/nav.html.twig' %}
+{% include 'book/book.html.twig' %}
+{% include "book/newSearch.html.twig" %}
+{% include 'book/cardTypeOf.html.twig' %}
+{% include 'search/footer.html.twig' %}
+{% endblock %}

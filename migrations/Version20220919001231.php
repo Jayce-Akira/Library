@@ -10,22 +10,22 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220714212029 extends AbstractMigration
+final class Version20220919001231 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Création de l\'entité prêt de livre';
+        return '';
     }
 
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE book_loan (id INT AUTO_INCREMENT NOT NULL, date_reserved DATE NOT NULL, date_loan DATE NOT NULL, date_return DATE NOT NULL, status VARCHAR(255) NOT NULL, is_late TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE loan CHANGE date_loan date_loan DATE DEFAULT NULL, CHANGE date_return date_return DATE DEFAULT NULL, CHANGE status status VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE book_loan');
+        $this->addSql('ALTER TABLE loan CHANGE date_loan date_loan DATE NOT NULL, CHANGE date_return date_return DATE NOT NULL, CHANGE status status VARCHAR(255) NOT NULL');
     }
 }

@@ -7,42 +7,71 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Type;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[ORM\Table(name: '`user`')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column()]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $phone = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateOfBirth = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $address = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
 
     #[ORM\Column]
-    private ?bool $isConfirmed = null;
+    private array $roles = [];
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $dateSignin = null;
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: BookLoan::class, orphanRemoval: true)]
-    private Collection $bookLoans;
+    #[ORM\Column(length: 255)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_of_birth = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $zipcode = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $city = null;
+
+    #[ORM\Column]
+    private ?bool $is_confirmed = null;
+
+    #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(length: 12, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(length: 12, nullable: true)]
+    private ?string $mobile_phone = null;
+
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Loan::class, orphanRemoval: true)]
+    private Collection $loans;
 
     public function __construct()
     {
-        $this->bookLoans = new ArrayCollection();
+        $this->loans = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
+        $this->is_confirmed = 0;
     }
 
     public function getId(): ?int
@@ -50,50 +79,103 @@ class User
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getEmail(): ?string
     {
-        return $this->firstName;
+        return $this->email;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setEmail(string $email): self
     {
-        $this->firstName = $firstName;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->lastName;
+        return (string) $this->email;
     }
 
-    public function setLastName(string $lastName): self
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->lastName = $lastName;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getPhone(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->phone;
+        return $this->password;
     }
 
-    public function setPhone(string $phone): self
+    public function setPassword(string $password): self
     {
-        $this->phone = $phone;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
 
     public function getDateOfBirth(): ?\DateTimeInterface
     {
-        return $this->dateOfBirth;
+        return $this->date_of_birth;
     }
 
-    public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): self
+    public function setDateOfBirth(?\DateTimeInterface $date_of_birth): self
     {
-        $this->dateOfBirth = $dateOfBirth;
+        $this->date_of_birth = $date_of_birth;
 
         return $this;
     }
@@ -110,57 +192,113 @@ class User
         return $this;
     }
 
-    public function isIsConfirmed(): ?bool
+    public function getZipcode(): ?string
     {
-        return $this->isConfirmed;
+        return $this->zipcode;
     }
 
-    public function setIsConfirmed(bool $isConfirmed): self
+    public function setZipcode(string $zipcode): self
     {
-        $this->isConfirmed = $isConfirmed;
+        $this->zipcode = $zipcode;
 
         return $this;
     }
 
-    public function getDateSignin(): ?\DateTimeInterface
+    public function getCity(): ?string
     {
-        return $this->dateSignin;
+        return $this->city;
     }
 
-    public function setDateSignin(\DateTimeInterface $dateSignin): self
+    public function setCity(string $city): self
     {
-        $this->dateSignin = $dateSignin;
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function isIsConfirmed(): ?bool
+    {
+        return $this->is_confirmed;
+    }
+
+    public function setIsConfirmed(bool $is_confirmed): self
+    {
+        $this->is_confirmed = $is_confirmed;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getMobilePhone(): ?string
+    {
+        return $this->mobile_phone;
+    }
+
+    public function setMobilePhone(?string $mobile_phone): self
+    {
+        $this->mobile_phone = $mobile_phone;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, BookLoan>
+     * @return Collection<int, Loan>
      */
-    public function getBookLoans(): Collection
+    public function getLoans(): Collection
     {
-        return $this->bookLoans;
+        return $this->loans;
     }
 
-    public function addBookLoan(BookLoan $bookLoan): self
+    public function addLoan(Loan $loan): self
     {
-        if (!$this->bookLoans->contains($bookLoan)) {
-            $this->bookLoans[] = $bookLoan;
-            $bookLoan->setUser($this);
+        if (!$this->loans->contains($loan)) {
+            $this->loans->add($loan);
+            $loan->setUsers($this);
         }
 
         return $this;
     }
 
-    public function removeBookLoan(BookLoan $bookLoan): self
+    public function removeLoan(Loan $loan): self
     {
-        if ($this->bookLoans->removeElement($bookLoan)) {
+        if ($this->loans->removeElement($loan)) {
             // set the owning side to null (unless already changed)
-            if ($bookLoan->getUser() === $this) {
-                $bookLoan->setUser(null);
+            if ($loan->getUsers() === $this) {
+                $loan->setUsers(null);
             }
         }
 
         return $this;
+    }
+
+    public function __toString(){
+        return $this->lastname; // Remplacer champ par une propriété "string" de l'entité
+    }
+
+    public function is_confirmed(){
+        return $this->is_confirmed; // Remplacer champ par une propriété "string" de l'entité
     }
 }

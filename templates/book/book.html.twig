@@ -1,0 +1,19 @@
+<section class="mt-5">
+<div class="container">
+  <div class="row">
+    <div class="col-6" style="background-image: url('{{asset('images/' ~ book.img_cover)}}'); background-position: center; background-repeat: no-repeat; background-size: cover; width=auto; height: 510px;">
+    </div>
+    <div class="col-6 text-center">
+    <h1 class = "mt-3">
+    TITRE DU LIVRE : {{ book.title }}
+    </h1>
+    <p class = "mt-5">{{ book.description }}</p>
+    {% if app.user and app.user.is_confirmed and book.nb_of_book > 0 and show_bt %}
+    {{ form(formReserved) }}
+    {% else %}
+     <button type="button" class="btn btn-marronClaire text-sable btn-lg mt-5" disabled>Réservation</button>
+    {% endif %}
+    </div>
+  </div>
+</div>
+</section>

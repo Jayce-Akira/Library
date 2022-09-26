@@ -10,22 +10,22 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220714212533 extends AbstractMigration
+final class Version20220917145819 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Création de l\'entité livre';
+        return '';
     }
 
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE book (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, img_cover VARCHAR(255) DEFAULT NULL, description LONGTEXT DEFAULT NULL, author VARCHAR(255) NOT NULL, date_published DATE NOT NULL, editor VARCHAR(255) NOT NULL, nb_of_books INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE loan CHANGE date_loan date_loan DATE DEFAULT NULL, CHANGE date_return date_return DATE DEFAULT NULL, CHANGE status status VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE book');
+        $this->addSql('ALTER TABLE loan CHANGE date_loan date_loan DATE NOT NULL, CHANGE date_return date_return DATE NOT NULL, CHANGE status status VARCHAR(255) NOT NULL');
     }
 }
